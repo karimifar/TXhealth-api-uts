@@ -1,5 +1,7 @@
-module.exports = function(sequelize, DataTypes) {
-    var zcta_geo = sequelize.define("zcta_geo", {
+module.exports = function (sequelize, DataTypes) {
+  var zcta_geo = sequelize.define(
+    "zcta_geo",
+    {
       zcta: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -11,17 +13,17 @@ module.exports = function(sequelize, DataTypes) {
       c_lat: DataTypes.FLOAT,
       c_lng: DataTypes.FLOAT,
     },
-    { 
-      timestamps: false 
-    })
-
-    zcta_geo.associate = function(models){
-      zcta_geo.hasMany(models.maltreatment_val_zip,{
-        foreignKey: "zip",
-        onDelete: "cascade",
-      })
+    {
+      timestamps: false,
     }
-    
-    return zcta_geo;
+  );
+
+  zcta_geo.associate = function (models) {
+    // zcta_geo.hasMany(models.maltreatment_val_zip,{
+    //   foreignKey: "zip",
+    //   onDelete: "cascade",
+    // })
   };
-  
+
+  return zcta_geo;
+};
