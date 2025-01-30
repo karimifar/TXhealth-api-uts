@@ -1,3 +1,5 @@
+var expressValidator = require("express-validator");
+
 var db = require("../models");
 
 module.exports = function (app) {
@@ -5,46 +7,98 @@ module.exports = function (app) {
     res.send("test");
   });
 
-  app.get("/api/validatezcta/:zip", function (req, res) {
-    var zip = req.params.zip;
-    db.zcta_geo
-      .findAll({
-        where: {
-          zcta: zip,
-        },
-      })
-      .then(function (data) {
-        res.json(data);
-      });
-  });
-  app.get("/api/validatecty/:cty", function (req, res) {
-    var cty = req.params.cty;
-    db.cnty_centroid
-      .findAll({
-        where: {
-          county: cty,
-        },
-      })
-      .then(function (data) {
-        res.json(data);
-      });
-  });
+  app.get(
+    "/api/validatezcta/:zip",
+    [
+      expressValidator
+        .check("zip")
+        .isNumeric()
+        .isLength({ min: 5, max: 5 })
+        .withMessage("Zip code must be a 5-digit number"),
+    ],
+    function (req, res) {
+      var errors = expressValidator.validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      var zip = req.params.zip;
+      db.zcta_geo
+        .findAll({
+          where: {
+            zcta: zip,
+          },
+        })
+        .then(function (data) {
+          res.json(data);
+        })
+        .catch(function (err) {
+          res.status(500).json({ error: err.message });
+        });
+    }
+  );
+  app.get(
+    "/api/validatecty/:cty",
+    [
+      expressValidator
+        .check("cty")
+        .isString()
+        .trim()
+        .withMessage("Invalid county name"),
+    ],
+    function (req, res) {
+      var errors = expressValidator.validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      var cty = req.params.cty;
+      db.cnty_centroid
+        .findAll({
+          where: {
+            county: cty,
+          },
+        })
+        .then(function (data) {
+          res.json(data);
+        })
+        .catch(function (err) {
+          res.status(500).json({ error: err.message });
+        });
+    }
+  );
 
-  app.get("/api/cpan/codebyzip/:zip", function (req, res) {
-    var zip = req.params.zip;
-    db.CPAN_codes.findAll({
-      where: {
-        zip: zip,
-      },
-      include: [
-        {
-          model: db.zip_county,
+  app.get(
+    "/api/cpan/codebyzip/:zip",
+    [
+      expressValidator
+        .check("zip")
+        .isNumeric()
+        .isLength({ min: 5, max: 5 })
+        .withMessage("Zip code must be a 5-digit number"),
+    ],
+    function (req, res) {
+      var errors = expressValidator.validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      var zip = req.params.zip;
+      db.CPAN_codes.findAll({
+        where: {
+          zip: zip,
         },
-      ],
-    }).then(function (dbZip) {
-      res.json(dbZip);
-    });
-  });
+        include: [
+          {
+            model: db.zip_county,
+          },
+        ],
+      })
+        .then(function (dbZip) {
+          res.json(dbZip);
+        })
+        .catch(function (err) {
+          res.status(500).json({ error: err.message });
+        });
+    }
+  );
 
   app.get("/api/alltxzips", function (req, res) {
     db.zip_county
