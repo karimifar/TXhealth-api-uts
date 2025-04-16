@@ -1,6 +1,6 @@
 module.exports = function (sequelize, DataTypes) {
-  var zip_county = sequelize.define(
-    "zip_county",
+  var zip_counties = sequelize.define(
+    "zip_counties",
     {
       zipcode: {
         type: DataTypes.INTEGER,
@@ -19,16 +19,16 @@ module.exports = function (sequelize, DataTypes) {
     }
   );
 
-  zip_county.associate = function (models) {
-    // zip_county.hasMany(models.NAS_zip,{
+  zip_counties.associate = function (models) {
+    // zip_counties.hasMany(models.NAS_zip,{
     //   foreignKey: "zip",
     //   onDelete: "cascade",
     // })
-    zip_county.hasMany(models.CPAN_codes, {
+    zip_counties.hasMany(models.CPAN_codes, {
       foreignKey: "zip",
       onDelete: "cascade",
     });
   };
 
-  return zip_county;
+  return zip_counties;
 };

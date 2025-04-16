@@ -22,7 +22,7 @@ module.exports = function (app) {
         return res.status(400).json({ errors: errors.array() });
       }
       var zip = req.params.zip;
-      db.zcta_geo
+      db.zcta_geos
         .findAll({
           where: {
             zcta: zip,
@@ -51,7 +51,7 @@ module.exports = function (app) {
         return res.status(400).json({ errors: errors.array() });
       }
       var cty = req.params.cty;
-      db.cnty_centroid
+      db.cnty_centroids
         .findAll({
           where: {
             county: cty,
@@ -87,7 +87,7 @@ module.exports = function (app) {
         },
         include: [
           {
-            model: db.zip_county,
+            model: db.zip_counties,
           },
         ],
       })
@@ -101,7 +101,7 @@ module.exports = function (app) {
   );
 
   app.get("/api/alltxzips", function (req, res) {
-    db.zip_county
+    db.zip_counties
       .findAll({
         attributes: ["zipcode"],
       })
@@ -115,7 +115,7 @@ module.exports = function (app) {
   });
 
   app.get("/api/alltxcounties", function (req, res) {
-    db.cnty_centroid
+    db.cnty_centroids
       .findAll({
         attributes: ["county"],
       })

@@ -1,19 +1,22 @@
 module.exports = function (sequelize, DataTypes) {
-  var cnty_centroids = sequelize.define(
-    "cnty_centroids",
+  var zcta_geos = sequelize.define(
+    "zcta_geos",
     {
-      fips: {
+      zcta: {
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
+      z_lng: DataTypes.FLOAT,
+      z_lat: DataTypes.FLOAT,
       county: DataTypes.STRING,
-      c_lng: DataTypes.FLOAT,
+      fips: DataTypes.INTEGER,
       c_lat: DataTypes.FLOAT,
+      c_lng: DataTypes.FLOAT,
     },
     {
       timestamps: false,
     }
   );
 
-  return cnty_centroids;
-};
+  return zcta_geos;
+}; 

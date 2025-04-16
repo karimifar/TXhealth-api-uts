@@ -8,6 +8,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
 var cors = require("cors");
+var fs = require("fs");
 // var enforce = require("express-sslify")
 var env = process.env.NODE_ENV || 'dev';
 
@@ -17,9 +18,18 @@ require('dotenv').config();
 // Sets up the Express App
 // =============================================================
 var app = express();
-var PORT = process.env.PORT ||3306;
+var PORT = process.env.PORT || 3306;
 // Requiring our models for syncing
 var db = require("./models");
+
+// Check if SQLite database exists
+const config = require('./config/config.json')[env === 'dev' ? 'development' : env];
+const dbPath = path.join(__dirname, config.storage);
+
+if (!fs.existsSync(dbPath)) {
+  console.log("SQLite database not found. Please run 'npm run init-db' to initialize the database.");
+  process.exit(1);
+}
 
 // Sets up the Express app to handle data parsing
 
@@ -37,10 +47,8 @@ if(env === "production"){
   console.log("IT is DEV")
 }
 
-
 // Routes
 // =============================================================
-
 
 // Static directory
 require("./routes/api-routes")(app);

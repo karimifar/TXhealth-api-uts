@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
     { timestamps: false });
   
     CPAN_codes.associate = function(models){
-      CPAN_codes.belongsTo(models.zip_county,{
+      CPAN_codes.belongsTo(models.zip_counties,{
         foreignKey: "zip",
       })
     }

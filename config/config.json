@@ -1,26 +1,17 @@
 {
   "development": {
-    "username": "root",
-    "password": "root",
-    "database": "TXHealth",
-    "host": "127.0.0.1",
-    "port": 8889,
-    "dialect": "mysql"
+    "dialect": "sqlite",
+    "storage": "./data/txhealth.sqlite",
+    "logging": false
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "dialect": "mysql"
+    "dialect": "sqlite",
+    "storage": "./data/test.sqlite",
+    "logging": false
   },
   "production": {
-    "username": "karimifar",
-    "password": "HealthAffairs2018!",
-    "database": "txhealth",
-    "host": "208.113.244.124",
-    "PORT": 3306,
-    "dialect": "mysql"
+    "dialect": "sqlite",
+    "storage": "./data/txhealth.sqlite",
+    "logging": false
   }
 }
